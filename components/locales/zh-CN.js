@@ -54,5 +54,12 @@ module.exports = {
   },
   tabs: {
     more: '更多'
+  },
+  transfer: {
+    emptyContent: '暂无数据',
+    allSelect: '全选',
+    selected: '已选',
+    limited: '数量达到上限，无法添加',
+    search: '搜索'
   }
 }

@@ -54,5 +54,12 @@ module.exports = {
   },
   tabs: {
     more: 'more'
+  },
+  transfer: {
+    emptyContent: 'No Datas',
+    allSelect: 'All',
+    selected: 'Selected',
+    limited: 'The number is out of limit',
+    search: 'Search'
   }
 }

@@ -7,6 +7,7 @@ import Input from '../input'
 import classNames from 'classnames'
 import withDragDropContext from '../lib/withDragDropContext'
 import Item from './Item'
+import Provider from '../context'
 import './style/index'
 
 class Transfer extends Component {
@@ -182,7 +183,7 @@ class Transfer extends Component {
     this.setState({ sourceNode: null })
   }
   renderContainer (dir, datas) {
-    const { mode, showAllSelect, searchable, draggable, emptyContent, title, disabled } = this.props
+    const { mode, showAllSelect, searchable, draggable, emptyContent, title, disabled, localeDatas } = this.props
     const {
       sourceSelectedKeys,
       targetSelectedKeys,
@@ -214,7 +215,7 @@ class Transfer extends Component {
           <div className='hi-transfer__searchbar'>
             <Icon name='search' />
             <Input
-              placeholder='搜索'
+              placeholder={localeDatas.transfer.search}
               onChange={this.searchEvent.bind(this, dir)}
               value={filterText}
             />
@@ -228,7 +229,7 @@ class Transfer extends Component {
               {dir === 'left' && limited && (
                 <li key='limit-tips' className='hi-transfer__item hi-transfer__item--limit'>
                   <div className='hi-transfer__warning' />
-                  <span>数量达上限，无法添加</span>
+                  <span>{localeDatas.transfer.limited}</span>
                 </li>
               )}
               {filterResult.map((item, index) => {
@@ -265,7 +266,7 @@ class Transfer extends Component {
         {mode !== 'basic' && showAllSelect && (
           <div className={footerCls}>
             <Checkbox
-              text='全选'
+              text={localeDatas.transfer.allSelect}
               checked={
                 selectedKeys.length !== 0 &&
                 selectedKeys.length === filterResult.length &&
@@ -273,7 +274,7 @@ class Transfer extends Component {
               }
               onChange={this.allCheckboxEvent.bind(this, dir)}
             />
-            <span>已选：{selectedKeys.length}</span>
+            <span>{localeDatas.transfer.selected}：{selectedKeys.length}</span>
           </div>
         )}
       </div>
@@ -320,7 +321,7 @@ Transfer.defaultProps = {
   showAllSelect: false,
   searchable: false,
   draggable: false,
-  emptyContent: ['暂无数据', '暂无数据'],
+  emptyContent: ['No Datas', 'No Datas'],
   title: ['', ''],
   disabled: false
 }
@@ -332,4 +333,4 @@ Transfer.propTypes = {
   disabled: PropTypes.bool,
   targetLimit: PropTypes.number
 }
-export default withDragDropContext(Transfer)
+export default withDragDropContext(Provider(Transfer))
