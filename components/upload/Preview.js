@@ -18,7 +18,14 @@ export default class Preview extends Component {
   static propTypes = {
     src: PropTypes.string,
     show: PropTypes.bool,
+    base64: PropTypes.bool, // fix base64 不能触发 img onLoad 事件
     onClose: PropTypes.func
+  }
+
+  static defaultProps = {
+    show: false,
+    base64: false,
+    src: ''
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -65,7 +72,7 @@ export default class Preview extends Component {
   }
 
   render () {
-    const { show, src } = this.props
+    const { show, src, base64 } = this.props
     const {
       extraClass,
       style,
@@ -80,7 +87,7 @@ export default class Preview extends Component {
         component='div'
       >
         <div key={1} className={classNames('hi-preview', extraClass, {'hi-preview--hide': !show})} onClick={this.onClose.bind(this)}>
-          <div className={classNames('hi-preview-image', {'hi-preview-image--hide': !imgLoaded})} style={style}>
+          <div className={classNames('hi-preview-image', {'hi-preview-image--hide': !imgLoaded && !base64})} style={style}>
             <img
               ref={this.imgRef}
               src={src}

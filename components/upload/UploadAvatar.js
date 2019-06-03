@@ -174,7 +174,7 @@ class UploadAvatar extends Upload {
     context.drawImage(canvasOrigin, cropperRect.left-originRect.left, cropperRect.top-originRect.top, cropperWidth, cropperHeight, 0, 0, cropperWidth, cropperHeight)
     const dataUrl = canvasPreview.toDataURL()
     const file = this.base2blob(dataUrl, this.filename)
-    file.url =dataUrl
+    file.url = dataUrl
 
     this.formatFile(file)
     this.setState({
@@ -220,10 +220,8 @@ class UploadAvatar extends Upload {
     const canvasRect = this.canvasRef.getBoundingClientRect()
     const deltaHeight = (this.containerHeight-cropperHeight)/2
     const deltaWidth = (this.containerWidth-cropperWidth)/2
-    let maxTop
-    let minTop
-    let maxLeft
-    let minLeft
+    let maxTop, minTop, maxLeft, minLeft
+
     if (deltaHeight > canvasRect.height) {
       maxTop = deltaHeight + cropperHeight
       minTop = deltaHeight - canvasRect.height
@@ -412,6 +410,7 @@ class UploadAvatar extends Upload {
         <Preview
           src={file&&file.url}
           show={showPreviewModal}
+          base64={true}
           onClose={this.closePreviewModal.bind(this)}
         />
       </div>
