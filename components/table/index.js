@@ -13,9 +13,7 @@ import '../icon/style'
 import {setKey, scrollTop, getStyle, getPosition} from './tool'
 import request from 'axios'
 import qs from 'qs'
-let axios = request.create({
-  baseURL: ''
-})
+
 class Table extends Component {
   static propTypes = {
     data: PropTypes.array,
@@ -379,10 +377,10 @@ class Table extends Component {
   render () {
     // 多选配置
     // noinspection JSAnnotator
-    let {pagination, name, size = 'normal', bordered = false, striped = false, scrollX} = this.props
+
+    let {pagination, name, size = 'normal', bordered = false, striped = false, scrollX, header = null, footer = null} = this.props
     // noinspection JSAnnotator
     let {scroll, columnMenu, serverPagination} = this.state
-
     let content
     // 不滚动
     if (!scroll.x && !scroll.y) {
@@ -435,44 +433,22 @@ class Table extends Component {
         serverPagePosition = 'flex-end'
       }
     }
+
+    // 分页组件从受控模式，变成非受控模式，兼容处理
+    let serverPaginationConfig
+    if (serverPagination && serverPagination.current) {
+      serverPaginationConfig = {
+        ...serverPagination,
+        defaultCurrent: serverPagination.current
+      }
+      delete serverPaginationConfig.current
+    }
     return (
       <div className={prifix({table: true, [size]: size, bordered, striped})} ref={this.dom}>
-        <div >
+        {header && <div className={prifix({'table-pre-header': true})}>{header()}</div>}
+        <div className={prifix({'table-container': true})}>
           <div >{content}</div>
-        </div>
-        {(pagination || columns) && <br /> }
-        {
-          pagination && <div style={{display: 'flex', justifyContent: pagePosition}}>
-            {
-              <div className={prifix('table-page')} >
-                <Pagination
-                  {...pagination}
-                />
-              </div>
-            }
-          </div>
-        }
-        {serverPagination && serverPagination.current && serverPagination.current && <div style={{display: 'flex', justifyContent: serverPagePosition}} a='1'>
-          {
-            <div className={prifix('table-page')} >
-              <Pagination
-                pageSize={serverPagination.pageSize}
-                total={serverPagination.total}
-                current={serverPagination.current}
-                onChange={(current) => {
-                  this.setState({
-                    serverPagination: {
-                      ...serverPagination,
-                      current
-                    }
-                  }, this.fetch)
-                }}
-              />
-            </div>
-          }
-        </div>
-        }
-        { name &&
+          { name &&
           <div className={prifix('table-setting')} ref={this.setting}>
             <Icon name='menu' style={{color: '#4284F5', fontSize: '24px'}}
               onClick={(e) => {
@@ -511,6 +487,39 @@ class Table extends Component {
               </ClickOutside>
             }
           </div>
+          }
+        </div>
+        {footer && <div className={prifix({'table-pre-footer': true})}>{footer()}</div>}
+        {(pagination || columns) && <br /> }
+        {
+          pagination && <div style={{display: 'flex', justifyContent: pagePosition}}>
+            {
+              <div className={prifix('table-page')} >
+                <Pagination
+                  {...pagination}
+                />
+              </div>
+            }
+          </div>
+        }
+        {serverPaginationConfig && serverPaginationConfig.defaultCurrent && <div style={{display: 'flex', justifyContent: serverPagePosition}} a='1'>
+          {
+            <div className={prifix('table-page')} >
+              <Pagination
+                {...serverPaginationConfig}
+                onChange={(current) => {
+                  serverPaginationConfig.onChange(current)
+                  this.setState({
+                    serverPagination: {
+                      ...serverPagination,
+                      current
+                    }
+                  }, this.fetch)
+                }}
+              />
+            </div>
+          }
+        </div>
         }
       </div>
     )
@@ -726,8 +735,8 @@ class Table extends Component {
       type = 'GET',
       success = (res) => {},
       error = () => {},
+      mode = 'json',
       currentPageName = Table.config.currentPageName
-      // pageSizeName = Table.config.pageSizeName
     } = origin
 
     let l = loading.open({
@@ -737,11 +746,10 @@ class Table extends Component {
       serverPagination: {current}
     } = this.state
     let requestParams = {
+      [currentPageName]: current,
       ...data,
       ...extra
     }
-    requestParams[currentPageName] = current
-    // requestParams[pageSizeName] = pageSize
 
     let options = {
       url,
@@ -750,12 +758,16 @@ class Table extends Component {
     if (options.method === 'GET') {
       options.params = requestParams
     } else {
-      options.data = qs.stringify(requestParams)
+      if (mode !== 'json') {
+        options.data = qs.stringify(requestParams)
+      } else {
+        options.data = requestParams
+      }
     }
     if (headers) {
       options.headers = headers
     }
-    axios.request(options).then(res => {
+    request.create().request(options).then(res => {
       let {data, columns, page} = success(res)
       let columnsDetail = this.setColumnsDetail(null, null, columns)
       this.setState({
@@ -765,22 +777,26 @@ class Table extends Component {
       })
       this.runMemory()
       l.close()
-    }).catch(error)
+    }).catch((e) => {
+      l.close()
+      error(e)
+    })
   }
 
   reset (props) {
     // noinspection JSAnnotator
-
     const {
       origin: {
         data,
         url,
         headers,
         type = 'GET',
+        mode = 'json',
         success = (res) => {},
-        error = () => {}
+        error = () => {},
         // pageSize = Table.config.pageSize,
-        // pageSizeName = Table.config.pageSizeName
+        // pageSizeName = Table.config.pageSizeName,
+        currentPageName = Table.config.currentPageName
       }
     } = props || this.props
 
@@ -791,7 +807,9 @@ class Table extends Component {
     let requestParams = {
       ...data
     }
-    // requestParams[pageSizeName] = pageSize
+    if (!requestParams[currentPageName]) {
+      requestParams[currentPageName] = 1
+    }
     let options = {
       method: ['GET', 'get'].includes(type) ? 'GET' : 'POST',
       url
@@ -799,13 +817,17 @@ class Table extends Component {
     if (options.method === 'GET') {
       options.params = requestParams
     } else {
-      options.data = qs.stringify(requestParams)
+      if (mode !== 'json') {
+        options.data = qs.stringify(requestParams)
+      } else {
+        options.data = requestParams
+      }
     }
     if (headers) {
       options.headers = headers
     }
 
-    axios(options).then(res => {
+    request.create().request(options).then(res => {
       let {data, columns, page} = success(res)
       this.setState({
         dataSource: data,
@@ -819,7 +841,10 @@ class Table extends Component {
         this.runMemory()
         l.close()
       })
-    }).catch(error)
+    }).catch((e) => {
+      l.close()
+      error(e)
+    })
   }
 
   componentDidMount () {
@@ -877,6 +902,7 @@ class Table extends Component {
     if (props.origin) {
       let oldOrigin = this.props.origin
       let newOrigin = props.origin
+
       let bool = oldOrigin.url !== newOrigin.url
       oldOrigin.data = oldOrigin.data || {}
       newOrigin.data = newOrigin.data || {}
@@ -890,6 +916,13 @@ class Table extends Component {
       for (let key in oldOrigin.headers) {
         if (oldOrigin.headers[key] !== newOrigin.headers[key]) {
           bool = true
+        }
+      }
+
+      let pageSizeName = oldOrigin.pageSizeName || Table.config.pageSizeName
+      if (this.state.serverPagination && this.state.serverPagination.current !== 1) {
+        if (oldOrigin.data[pageSizeName] !== newOrigin.data[pageSizeName]) {
+          bool = false
         }
       }
 
