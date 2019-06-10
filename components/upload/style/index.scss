@@ -1,6 +1,10 @@
 /* stylelint-disable */
 .file-name {
   margin-left: 10px;
+
+  &--error {
+    color: #f44141;
+  }
 }
 
 .hi-upload {
@@ -117,7 +121,6 @@
       .state-wrap {
         float: right;
 
-
         .icon-wrong {
           display: none;
         }
@@ -173,7 +176,6 @@
     display: none;
   }
 
-
   .show-drop-content {
     position: absolute;
     left: 0;
@@ -202,13 +204,10 @@
       }
     }
   }
-  // .drop-click{
-  //   color: #6fccfc;
-  // }
+
   .drop-over {
     border: 1px dashed #0099fb;
   }
-
 
   .upload-list {
     padding: 20px;
@@ -263,7 +262,6 @@
     width: 480px;
     padding: 20px 0 0 20px;
 
-
     &::after {
       content: '\0020';
       display: block;
@@ -271,7 +269,6 @@
       clear: both;
     }
   }
-
 
   li {
     width: 140px;
@@ -742,4 +739,3 @@
     }
   }
 }
-

@@ -2,6 +2,7 @@ import React from 'react'
 import classNames from 'classnames'
 import Provider from '../context'
 import Upload from './Upload'
+import Icon from '../icon'
 
 class UploadClick extends Upload {
   render () {
@@ -52,16 +53,22 @@ class UploadClick extends Upload {
                 >
                   <p className='upload-list__item'>
                     <span className={classNames(`Ficon-${file.fileType}`, 'upload-list__item-icon')} />
-                    <span className='file-name upload-list__item-name'>{listName}</span>
-                    <span className='state-wrap upload-list__item-status'>
-                      {file.uploadState !== 'loading' && (<span className={'Ficon-' + this.uploadStatusIcon(file.uploadState)} />)}
-                      { onRemove &&
-                        <span
-                          className='Ficon-wrong upload-list__item-remove'
+                    <span
+                      className={classNames('file-name', 'upload-list__item-name', {
+                        'file-name--error': file.uploadState === 'error'
+                      })}
+                    >
+                      {listName}
+                    </span>
+                    {onRemove && (
+                      <span className='state-wrap upload-list__item-status'>
+                        <Icon
+                          name={file.uploadState === 'loading' ? 'close' : 'delete'}
+                          style={{ cursor: 'pointer' }}
                           onClick={() => this.deleteFile(file, index)}
                         />
-                      }
-                    </span>
+                      </span>
+                    )}
                   </p>
                   {file.uploadState === 'loading' && (<div className='loading-line-wrap'>
                     <i className='loading-line' style={{ width: (file.progressNumber * 3.25) + 'px' }} />

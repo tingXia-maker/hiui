@@ -1,6 +1,8 @@
 import React from 'react'
 import Upload from './Upload'
 import Provider from '../context'
+import classNames from 'classnames'
+import Icon from '../icon'
 
 class UploadPictureCard extends Upload {
   render () {
@@ -56,16 +58,20 @@ class UploadPictureCard extends Upload {
                   </div>
                   <div className='img-info-wrap'>
                     <p className='upload-list__item file-wrap'>
-                      <span className='file-name upload-list__item-name'>{listName}</span>
-                      {file.uploadState !== 'loading' && (
+                      <span
+                        className={classNames('file-name', 'upload-list__item-name', {
+                          'file-name--error': file.uploadState === 'error'
+                        })}
+                      >
+                        {listName}
+                      </span>
+                      {onRemove && (
                         <span className='state-wrap upload-list__item-status'>
-                          <span className={'Ficon-' + this.uploadStatusIcon(file.uploadState)} />
-                          { onRemove &&
-                            <span
-                              className='Ficon-wrong upload-list__item-remove'
-                              onClick={() => this.deleteFile(file, index)}
-                            />
-                          }
+                          <Icon
+                            name={file.uploadState === 'loading' ? 'close' : 'delete'}
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => this.deleteFile(file, index)}
+                          />
                         </span>
                       )}
                     </p>
