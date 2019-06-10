@@ -32,6 +32,7 @@ export default class Upload extends Component {
     customUpload: PropTypes.func,
     beforeUpload: PropTypes.func,
     defaultFileList: PropTypes.array,
+    maxAmount: PropTypes.number,
     onRemove: PropTypes.oneOfType([PropTypes.func, PropTypes.bool])
   }
 
@@ -68,7 +69,7 @@ export default class Upload extends Component {
     _fileList.map(file => {
       file.fileId = this.getFileId()
     })
-    return _fileList
+    return this.props.maxAmount > 0 && this.props.maxAmount < _fileList.length ? _fileList.slice(0, this.props.maxAmount) : _fileList
   }
 
   getFileType (file) {

@@ -42,7 +42,8 @@ class UploadPhoto extends Upload {
       onRemove,
       disabled,
       accept,
-      hasBorder
+      hasBorder,
+      maxAmount
     } = this.props
 
     return (
@@ -83,7 +84,7 @@ class UploadPhoto extends Upload {
               )
             }
           })}
-          <li>
+          {!(maxAmount > 0 && maxAmount <= fileList.length) && <li>
             <label>
               <input
                 ref={node => {
@@ -98,7 +99,7 @@ class UploadPhoto extends Upload {
               />
               <span className='photo-upload'>+</span>
             </label>
-          </li>
+          </li>}
         </ul>
         <Preview
           src={previewFile.url}

@@ -27,9 +27,6 @@ class UploadDrag extends Upload {
   dropFn (e) {
     e.stopPropagation()
     e.preventDefault()
-    if (this.props.disabled) {
-      return
-    }
     this.setState({ overEvent: false })
     let files = e.dataTransfer.files
     this.uploadFiles(files)
@@ -41,19 +38,25 @@ class UploadDrag extends Upload {
       accept,
       disabled,
       onRemove,
-      hasBorder
+      hasBorder,
+      maxAmount
     } = this.props
     const {
       overEvent,
       fileList
     } = this.state
 
+    const isDisabled = disabled || (maxAmount > 0 && maxAmount <= fileList.length)
     return (
       <div
         className={classNames('hi-upload upload-drag', hasBorder && 'hasborder', {'drop-over': overEvent && !disabled, 'hi-upload--disabled': disabled})}
         onDragOver={e => this.dragoverFn(e)}
         onDragLeave={e => this.dragleaveFn(e)}
-        onDrop={e => this.dropFn(e)}
+        onDrop={e => {
+          if (!isDisabled) {
+            this.dropFn(e)
+          }
+        }}
       >
         <p
           className={
@@ -72,7 +75,7 @@ class UploadDrag extends Upload {
               className='upload-input'
               onChange={e => this.uploadFiles(e.target.files)}
               multiple={multiple && 'multiple'}
-              disabled={disabled && 'disabled'}
+              disabled={isDisabled && 'disabled'}
               hidden
               accept={accept}
             />

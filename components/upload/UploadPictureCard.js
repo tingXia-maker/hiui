@@ -13,12 +13,13 @@ class UploadPictureCard extends Upload {
       multiple,
       disabled,
       accept,
-      onRemove
+      onRemove,
+      maxAmount
     } = this.props
     const {
       fileList
     } = this.state
-
+    const isDisabled = disabled || (showUploadList && maxAmount > 0 && maxAmount <= fileList.length)
     return (
       <div className='hi-upload upload-pictureCard'>
         <div>
@@ -29,13 +30,13 @@ class UploadPictureCard extends Upload {
               className='upload-input'
               onChange={e => this.uploadFiles(e.target.files)}
               multiple={multiple && 'multiple'}
-              disabled={disabled && 'disabled'}
+              disabled={isDisabled && 'disabled'}
               accept={accept}
               hidden
             />
             <span
               className={`upload-title ${
-                disabled ? 'disabled' : ''
+                isDisabled ? 'disabled' : ''
               }`}
             >
               <i className={`icon Ficon-${buttonIcon}`} />&nbsp;{ buttonText }
