@@ -36,7 +36,8 @@ export default class TreeNode extends Component {
       // 总共高亮的项
       highlightNum: 0,
       positionX: null,
-      positionY: null
+      positionY: null,
+      processing: false
     }
   }
   static getDerivedStateFromProps (props, state) {
@@ -57,6 +58,9 @@ export default class TreeNode extends Component {
         positionY: y
       })
     }
+  }
+  setProcessing = status => {
+    this.setState({ processing: status })
   }
 
   setHighlightNum = () => {
@@ -453,6 +457,7 @@ export default class TreeNode extends Component {
       expanded,
       origin,
       onDragStart
+
       // onDrop
     } = this.props
     const {
@@ -463,7 +468,8 @@ export default class TreeNode extends Component {
       targetNode,
       dropDividerPosition,
       positionX,
-      positionY
+      positionY,
+      processing
     } = this.state
 
     return (
@@ -478,7 +484,8 @@ export default class TreeNode extends Component {
               prefixCls={prefixCls}
               draggable={draggable}
               onDragStart={onDragStart}
-              // onDrop={onDrop}
+              setProcessing={this.setProcessing}
+              processing={processing}
               checked={!!checked.includes(item.id)}
               highlight={highlight}
               highlightable={highlightable}

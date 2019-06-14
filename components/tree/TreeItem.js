@@ -8,6 +8,79 @@ const Types = {
   TreeNode: 'treeNode'
 }
 class TreeItem extends Component {
+  shouldComponentUpdate (nextProps) {
+    // console.log('processing', nextProps.processing)
+    // if (nextProps.isOver) {
+    //   console.log('^^^', nextProps.item.id)
+    // }
+    // console.log(nextProps.isOver, this.props.isOver)
+    // if (nextProps.item.id === 22) {
+    //   console.log(
+    //     '2444444',
+    //     nextProps.item.id,
+    //     // nextProps.targetNode,
+    //     // this.props.targetNode,
+    //     nextProps.isOver,
+    //     nextProps.dropDividerPosition,
+    //     this.props.dropDividerPosition
+    //   )
+    // }
+    const _isDragging =
+      nextProps.processing === true && nextProps.processing === this.props.processing
+    // const _isDuplicateOver = nextProps.isOver !== true && this.props.isOver !== true
+
+    const _isDuplicateOver =
+      (nextProps.isOver === true &&
+        this.props.isOver === nextProps.isOver &&
+        this.props.dropDividerPosition === nextProps.dropDividerPosition &&
+        (nextProps.targetNode === this.props.targetNode &&
+          nextProps.targetNode === nextProps.item.id)) ||
+      (nextProps.isOver !== true && this.props.isOver !== true)
+    if (
+      _isDragging &&
+      _isDuplicateOver
+      // false
+      // ((nextProps.isOver !== true && this.props.isOver !== true) ||
+      //   (this.props.isOver === nextProps.isOver &&
+      //     nextProps.isOver === true &&
+      //     this.props.dropDividerPosition === nextProps.dropDividerPosition))
+      // nextProps.targetNode !== nextProps.item.id
+      // this.props.targetNode === nextProps.targetNode
+      // (this.props.isOver === nextProps.isOver && nextProps.isOver !== true))
+      // nextProps.isOver !== true &&
+      // nextProps.isOver !== this.props.isOver
+    ) {
+      // console.log(
+      //   '22222',
+      //   nextProps.item.id,
+      //   // nextProps.targetNode,
+      //   // this.props.targetNode,
+      //   nextProps.isOver,
+      //   nextProps.dropDividerPosition,
+      //   this.props.dropDividerPosition
+      // )
+      return false
+    } else {
+      console.log(
+        '>>>>>>>>>>',
+        nextProps.item.id,
+        // nextProps.targetNode,
+        // this.props.targetNode,
+        nextProps.isOver,
+        nextProps.dropDividerPosition,
+        this.props.dropDividerPosition
+      )
+      return true
+    }
+
+    // if (this.props.targetNode === nextProps.targetNode) {
+    //   // console.log('item', this.props.item.id, this.props.targetNode, nextProps.targetNode)
+    //   return false
+    // } else {
+    //   console.log('>>>>>>>>>>', this.props.item.id, this.props.targetNode, nextProps.targetNode)
+    //   return true
+    // }
+  }
   render () {
     const {
       editable,
@@ -181,6 +254,7 @@ const source = {
       props.closeExpandedTreeNode(props.item.id)
     }
     props.onDragStart(props.item)
+    props.setProcessing(true)
     return { sourceItem: props.item, originalExpandStatus: props.expanded }
   },
   endDrag (props, monitor) {
@@ -219,6 +293,7 @@ const target = {
         removeTargetNode()
       } else {
         // 移动节点到相应位置
+        props.setProcessing(false)
         dropNode(sourceItem, targetItem, dropDividerPosition)
         removeDraggingNode()
         removeTargetNode()
@@ -261,7 +336,8 @@ function sourceCollect (connect, monitor) {
 function targetCollect (connect, monitor) {
   return {
     connectDropTarget: connect.dropTarget(),
-    isOver: monitor.isOver()
+    isOver: monitor.isOver(),
+    isOverSelf: monitor.isOver({ shallow: true })
   }
 }
 

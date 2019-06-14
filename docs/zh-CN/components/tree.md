@@ -352,6 +352,26 @@ constructor(props) {
           { id: 6, title: '产品' }
         ]
       },
+      { id: 31, title: '后端-1', onClick: data => {console.log('后端：', data)} },
+      { id: 41, title: '运维-41' },
+      { id: 51, title: '前端-51' },
+      { id: 61, title: '前端-61' },
+      { id: 71, title: '前端-71' },
+      { id: 81, title: '前端-81' },
+      { id: 91, title: '前端-91' },
+      { id: 101, title: '前端-101' },
+      { id: 111, title: '前端-111' },
+      { id: 121, title: '前端-121' },
+      { id: 131, title: '前端-131' },
+      { id: 141, title: '前端-141' },
+      { id: 151, title: '前端-151' },
+      { id: 161, title: '前端-161' },
+      { id: 171, title: '前端-171' },
+      { id: 181, title: '前端-181' },
+      { id: 191, title: '前端-191' },
+      { id: 201, title: '前端-201' },
+      { id: 211, title: '前端-211' },
+
       { id: 11, title: '小米',
         children: [
           { id: 22, title: '技术',
@@ -417,7 +437,7 @@ render() {
 | onChange         | 改变复选框状态时触发                                                    | Function(checkedArr:Array, title: String, isChecked: Boolean)  | -                            | -      |
 | onNodeToggle     | 节点被点击(展开/收起)时触发                                             | Function(data: Obejct, isExpanded: Boolean)                    | -                            | -      |
 | onCheckChange    | 节点选中项                                                              | Funciton(checkedArr: Array, title: String, isChecked: Boolean) | -                            | -      |
-| onCheck    | 点击节点多选框触发                                                      | Funciton(checkedArr: Array, item: Object, isChecked: Boolean)  | -                            | -      |
+| onCheck          | 点击节点多选框触发                                                      | Funciton(checkedArr: Array, item: Object, isChecked: Boolean)  | -                            | -      |
 | onDragStart      | 节点开始拖拽时触发                                                      | Funciton(dragNode: Object)                                     | -                            | -      |
 | onDrop           | 节点拖拽成功时触发                                                      | Funciton(dragNode: Object, dropNode: Object)                   | -                            | -      |
 | onDelete         | 节点删除时触发                                                          | Funciton(deleteNode: Object, data: Object)                     | -                            | -      |
@@ -427,7 +447,7 @@ render() {
 
 | 参数        | 说明                                                               | 类型     | 可选值 | 默认值 |
 | ----------- | ------------------------------------------------------------------ | -------- | ------ | ------ |
-| expanded      | 默认是否展开子菜单（优先级高于 defaultExpandAll）                  | Boolean  | -      | -  |
+| expanded    | 默认是否展开子菜单（优先级高于 defaultExpandAll）                  | Boolean  | -      | -      |
 | onClick     | 点击每项时触发的事件                                               | Function | -      | -      |
 | onNodeClick | 点击每项时触发，onClick 作用具体绑定的项，onNodeClick 作用于所以项 | Function | -      | -      |
 | style       | 单个节点样式                                                       | Object   | -      | -      |
