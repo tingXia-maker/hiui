@@ -10,13 +10,6 @@ import templates from '../pages/templates'
 import {setDesignNavs, setComponentsNavs, setComponents} from '../redux/action/global'
 History.createHashHistory()
 
-const logo = <Logo
-  url='https://xiaomi.github.io/hiui/#/'
-  logoUrl='https://xiaomi.github.io/hiui/static/img/logo.png?241e0618fe55d933c280e38954edea05'
-  text='HIUI'
-  title='HIUI'
-  alt='HIUI'
-/>
 class Index extends React.Component {
   componentNavs = []
   designNavs = []
@@ -38,7 +31,14 @@ class Index extends React.Component {
     this.state = {
       locale: locale
     }
-
+    const logoUrl = `/hiui/#/${locale}`
+    this.logo = <Logo
+      url={logoUrl}
+      logoUrl='https://xiaomi.github.io/hiui/static/img/logo.png?241e0618fe55d933c280e38954edea05'
+      text='HIUI'
+      title='HIUI'
+      alt='HIUI'
+    />
     const components = Object.assign(
       {
         docs: {
@@ -165,7 +165,7 @@ class Index extends React.Component {
     return (
       <Page
         header={<Header locale={this.props.locale} />}
-        logo={logo}
+        logo={this.logo}
         routes={routes(this.props.locale, siders, _designs, _templates)}
       />
     )
