@@ -1,5 +1,13 @@
 # 更新日志
 
+## 1.4.8
+
+- 修复：`<Table />` 组件操作记忆等功能。
+
+## 1.4.7
+
+- 修复：`<Select />`  组件对齐问题 [#322](https://github.com/XiaoMi/hiui/issues/322)。
+
 ## 1.4.6
 
 - 修复：`<Select />` 组件搜索特殊字符造成的崩溃问题 [#294](https://github.com/XiaoMi/hiui/issues/294)
