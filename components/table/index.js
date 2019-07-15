@@ -378,7 +378,7 @@ class Table extends Component {
     // 多选配置
     // noinspection JSAnnotator
 
-    let {pagination, name, size = 'normal', bordered = false, striped = false, scrollX, header = null, footer = null} = this.props
+    let {pagination, name, size = 'normal', bordered = false, striped = false, scrollX} = this.props
     // noinspection JSAnnotator
     let {scroll, columnMenu, serverPagination} = this.state
     let content
@@ -445,7 +445,7 @@ class Table extends Component {
     }
     return (
       <div className={prifix({table: true, [size]: size, bordered, striped})} ref={this.dom}>
-        {header && <div className={prifix({'table-pre-header': true})}>{header()}</div>}
+        {/* {header && <div className={prifix({'table-pre-header': true})}>{header()}</div>} */}
         <div className={prifix({'table-container': true})}>
           <div >{content}</div>
           { name &&
@@ -489,7 +489,7 @@ class Table extends Component {
           </div>
           }
         </div>
-        {footer && <div className={prifix({'table-pre-footer': true})}>{footer()}</div>}
+        {/* {footer && <div className={prifix({'table-pre-footer': true})}>{footer()}</div>} */}
         {(pagination || columns) && <br /> }
         {
           pagination && <div style={{display: 'flex', justifyContent: pagePosition}}>

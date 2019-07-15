@@ -70,7 +70,7 @@ export default class Body extends Component {
     }
   }
   render () {
-    let {columns, dataSource, cbs: {addExpand}, rowSelection = { }, highlightCols, advance} = this.props
+    let {columns, dataSource, cbs: {addExpand}, rowSelection = { }, highlightCols} = this.props
     columns = columns.filter(item => !item.hide)
     let selectedRowKeys = rowSelection.selectedRowKeys || []
     // 表头分组
@@ -136,7 +136,7 @@ export default class Body extends Component {
 
     return (
       <tbody className={prifix('table-tbody')}>
-        {dataSource.length > 0 && advance && advance.prefix && this.getPrefixNodes()}
+        {/* {dataSource.length > 0 && advance && advance.prefix && this.getPrefixNodes()} */}
         {nodes}
         <Footer className={'table-footer'} {...this.props} />
       </tbody>

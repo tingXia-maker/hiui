@@ -100,7 +100,7 @@ constructor(props){
   }
 }
 render() {
-  return <Table size='small' columns={this.columns} data={this.data} name='base'  checked={(item) => item.id === 1 || item.id === 3} />
+  return <Table size='small' columns={this.columns} data={this.data} name='small'  checked={(item) => item.id === 1 || item.id === 3} />
 }
 ```
 :::
@@ -147,7 +147,7 @@ constructor(props){
   }
 }
 render() {
-  return <Table size='large' columns={this.columns} data={this.data} name='base'  checked={(item) => item.id === 1 || item.id === 3} />
+  return <Table size='large' columns={this.columns} data={this.data} name='large'  checked={(item) => item.id === 1 || item.id === 3} />
 }
 ```
 :::
@@ -194,7 +194,7 @@ constructor(props){
   }
 }
 render() {
-  return <Table bordered columns={this.columns} data={this.data} name='base'  checked={(item) => item.id === 1 || item.id === 3} />
+  return <Table bordered columns={this.columns} data={this.data} name='bordered'  checked={(item) => item.id === 1 || item.id === 3} />
 }
 ```
 :::
@@ -241,7 +241,7 @@ constructor(props){
   }
 }
 render() {
-  return <Table striped columns={this.columns} data={this.data} name='base'  checked={(item) => item.id === 1 || item.id === 3} />
+  return <Table striped columns={this.columns} data={this.data} name='striped'  checked={(item) => item.id === 1 || item.id === 3} />
 }
 ```
 :::
@@ -314,12 +314,7 @@ render() {
           name={'sorter'} 
           columns={this.columns}
           data={this.data} name='sorter'
-          header={() =>(
-             <div>头部</div>
-          )}
-          footer={() => (
-            <div>底部</div>
-          )}
+        
           />
 }
 ```
@@ -398,17 +393,7 @@ render(){
     },
     dataName:'age'
   }
-  return <Table bordered columns={this.columns} data={data} rowSelection={rowSelection}
-     advance={{
-       prefix:{name:'prefix-name',age:'pre-age',address: 'pre-address'},
-       suffix:{name:'append-name',age:'append-age',address: 'append-address'}
-     }}
-     header={() =>(
-                <div>表头</div>
-             )}
-             footer={() => (
-               <div>abc</div>
-             )}
+  return <Table bordered columns={this.columns} data={data} name='select' rowSelection={rowSelection}
    />
 }
 
@@ -1150,13 +1135,9 @@ constructor(props){
 render() {
   return <Table 
       columns={this.columns} 
-      data={this.data} name='base'  
+      data={this.data} name='advance'  
       checked={(item) => item.id === 1 || item.id === 3}
-      header={() => <div>表格头部</div>}
-      footer={() => <div>表格底部</div>}
       advance={{
-        prefix: [{name:'hiui',age: '1years',address: 'xiaomi'},{name:'hiui2.0',age: '1.5years',address: 'xiaomi'}],
-        suffix: [{name: 'table',age: '1yeads',address: 'wuhan'},{name: 'table2.0',age: '1.5yeads',address: 'wuhan'}],
         avg:true,
         sum: true
       }}
@@ -1202,8 +1183,6 @@ render() {
 | columns | 表格数据列对应信息  | array | - | - |
 | data | 表格数据  | array | - | - |
 | emptyText | 数据为空时展示的文案  | string | - | No Data |
-| header | 表格头部  | Component | - | Null |
-| footer | 表格底部  | Component | - | Null |
 | scroll | 设置横向滚动，也可用于指定滚动区域的宽，建议为`x`设置一个数字，如果不设置，默认table宽度为100%  | number | true  | - |
 | fixTop | 吸顶  | Number | true | false |
 | pagination | 查看分页组件配置  | Object | - | false |
@@ -1229,6 +1208,5 @@ render() {
 | --------   | -----  | ----  |  ----  | ----  |
 | sum | 前端求和(在columns中设置type=number)  | Bollean |  -  |  normal |
 | avg | 前端求平均(在columns中设置type=number) | Bollean | -  |  false |
-| prefix | 在表格第一行插入一条说明性数据 | Object | - | null | 
-| suffix | 在表格最后一行插入一条说明性数据  | Object | - | null |
+
 
