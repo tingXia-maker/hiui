@@ -22,6 +22,7 @@ import getSeconds from 'date-fns/get_seconds'
 import addHours from 'date-fns/add_hours'
 import subDays from 'date-fns/sub_days'
 import differenceInDays from 'date-fns/difference_in_days'
+import isValid from 'date-fns/is_valid'
 export {
   getDaysInMonth, // 获取当月的天数
   subMonths, // 月份减法
@@ -46,5 +47,6 @@ export {
   getSeconds,
   addHours,
   subDays,
-  differenceInDays
+  differenceInDays,
+  isValid
 }

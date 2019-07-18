@@ -1,12 +1,12 @@
 import React, {Component} from 'react'
 import Modal from './Modal'
 import classNames from 'classnames'
-import {formatterDate, FORMATS, isVaildDate} from './constants'
+import {formatterDate, FORMATS} from './constants'
 
 import PropTypes from 'prop-types'
 import DatePickerType from './Type'
 
-import {startOfDay, endOfDay, parse, startOfWeek, endOfWeek, dateFormat} from './dateUtil'
+import {startOfDay, endOfDay, parse, startOfWeek, endOfWeek, dateFormat, isValid} from './dateUtil'
 import { addHours } from 'date-fns'
 class BasePicker extends Component {
   inputRoot = null
@@ -19,10 +19,8 @@ class BasePicker extends Component {
       style: {},
       date: null,
       isFocus: false,
-      // input 框内的显示的时间内容
       texts: ['', ''],
       placeholder: '',
-      rText: '',
       leftPlaceholder: '',
       rightPlaceholder: '',
       format: ''
@@ -240,12 +238,26 @@ class BasePicker extends Component {
       })
     }
   }
+  inputChangeEvent () {
+    let { texts, date } = this.state
+    let startDate = parse(texts[0])
+    let endDate = parse(texts[1])
+    if (isValid(startDate)) {
+      date.startDate ? date.startDate = startDate : date = startDate
+    }
+    if (isValid(endDate)) {
+      date.endDate && (date.endDate = endDate)
+    }
+    this.setState({date})
+  }
   clickOutSide (e) {
     const tar = e.target
+    this.inputChangeEvent()
     if (tar.className.indexOf('clear') !== -1) {
       this.setState({
         texts: ['', ''],
-        showPanel: false
+        showPanel: false,
+        date: this.props.value
       })
       return false
     }
@@ -255,8 +267,8 @@ class BasePicker extends Component {
     this.callback()
   }
   _input (text, ref = 'input', placeholder = 'Please Select...') {
-    const {disabled, type, onChange} = this.props
-
+    const {disabled} = this.props
+    const { texts } = this.state
     return (
       <input
         type='text'
@@ -265,10 +277,14 @@ class BasePicker extends Component {
         className={disabled ? 'disabled' : ''}
         disabled={disabled}
         onChange={e => {
-          isVaildDate(new Date(e.target.value)) && type === 'date' && onChange(new Date(e.target.value))
+          ref === 'input' ? (texts[0] = e.target.value) : (texts[1] = e.target.value)
+          // isVaildDate(new Date(e.target.value)) && type === 'date' && onChange(new Date(e.target.value))
           this.setState({
-            text: e.target.value
+            texts
+          }, () => {
+            this.inputChangeEvent()
           })
+          console.log(e.target.value)
         }}
         onFocus={(e) => {
           this.setState({
