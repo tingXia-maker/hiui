@@ -448,6 +448,7 @@ $basic-color: #4284f5 !default;
     // overflow-x: hidden;
     overflow-y: auto;
     padding: 0;
+    user-select: none;
 
     &:nth-child(2) {
       left: 60px;

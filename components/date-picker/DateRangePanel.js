@@ -5,18 +5,18 @@ import {DAY_MILLISECONDS} from './constants'
 import Icon from '../icon'
 import classNames from 'classnames'
 import Provider from '../context'
-import {dateFormat} from './dateUtil'
+import {dateFormat, isValid, getStartDate} from './dateUtil'
 import TimeRangePanel from './TimeRangePanel'
 
 class DatePanel extends Component {
   constructor (props) {
     super(props)
     let {startDate, endDate} = props.date
-    let leftDate = new Date(startDate)
-    let rightDate = endDate ? new Date(endDate) : nextMonth(leftDate)
+    let leftDate = getStartDate(startDate)
+    let rightDate = isValid(endDate) ? endDate : nextMonth(leftDate)
     if (endDate) {
-      const {year: sYear, month: sMonth} = deconstructDate(startDate)
-      const {year: eYear, month: eMonth} = deconstructDate(endDate)
+      const {year: sYear, month: sMonth} = deconstructDate(leftDate)
+      const {year: eYear, month: eMonth} = deconstructDate(rightDate)
       if (sYear === eYear && sMonth === eMonth) {
         rightDate = nextMonth(leftDate)
       }

@@ -10,9 +10,9 @@ class DatePicker extends BasePicker {
   initPanel (state, props) {
     let component = null
     let d = state.date
-    if (!d.startDate) {
-      d = {startDate: d, endDate: null}
-    }
+    // if (!d.endDate) {
+    //   d.endDate = new Date()
+    // }
     switch (props.type) {
       case 'month':
       case 'year':
@@ -33,7 +33,7 @@ class DatePicker extends BasePicker {
         component = (
           <DatePanel
             {...props}
-            date={state.date.startDate}
+            date={state.date}
             onPick={this.onPick.bind(this)}
             style={state.style}
           />

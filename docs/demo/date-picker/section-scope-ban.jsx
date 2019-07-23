@@ -7,12 +7,15 @@ import React from 'react'
 import DatePicker from '@hi-ui/hiui/es/date-picker'\n
 class Demo extends React.Component {
   render () {
+    let _d = new Date().getTime()
+    _d += (30 * 24 * 60 * 60 * 1000)
+
     return (
       <DatePicker
         placeholder={['开始日期', '结束日期']}
         type='daterange'
         minDate={new Date()}
-        maxDate={new Date(2019, 4, 28)}
+        maxDate={_d}
       />
     )
   }

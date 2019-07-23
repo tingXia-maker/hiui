@@ -8,8 +8,12 @@ import DatePicker from '@hi-ui/hiui/es/date-picker'\n
 class Demo extends React.Component {
   constructor () {
     super()
+    let _d = new Date().getTime()
+    _d += (7 * 24 * 60 * 60 * 1000)
+
     this.state = {
-      date: new Date()
+      date: new Date(),
+      maxDate: _d
     }
   }
   render () {
@@ -17,9 +21,9 @@ class Demo extends React.Component {
       <DatePicker
         value={this.state.date}
         minDate={new Date()}
-        maxDate={new Date(2019, 4, 28)}
+        maxDate={this.state.maxDate}
         onChange={(date) => {
-          this.setState({date})
+          console.log('选中值', date)
         }}
       />
     )

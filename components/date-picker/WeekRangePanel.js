@@ -3,13 +3,13 @@ import {deconstructDate, nextMonth} from './util'
 import Calender from './Calender'
 import Icon from '../icon'
 import classNames from 'classnames'
-import {startOfWeek, endOfWeek, isSameMonth} from './dateUtil'
+import {startOfWeek, endOfWeek, isSameMonth, isValid, getStartDate} from './dateUtil'
 export default class WeekRangePanel extends Component {
   constructor (props) {
     super(props)
     const {startDate, endDate} = props.date
-    let leftDate = new Date(startDate)
-    let rightDate = endDate || nextMonth(leftDate)
+    let leftDate = getStartDate(startDate)
+    let rightDate = isValid(endDate) ? endDate : nextMonth(leftDate)
     if (endDate) {
       if (isSameMonth(startDate, endDate)) {
         rightDate = nextMonth(leftDate)
@@ -18,8 +18,8 @@ export default class WeekRangePanel extends Component {
     this.state = {
       date: leftDate,
       range: {
-        startDate: startOfWeek(startDate),
-        endDate: endDate ? endOfWeek(endDate) : endOfWeek(startDate),
+        startDate: startOfWeek(leftDate),
+        endDate: rightDate ? endOfWeek(rightDate) : endOfWeek(leftDate),
         selecting: false
       },
       leftDate,
