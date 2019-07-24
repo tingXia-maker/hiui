@@ -6,7 +6,7 @@ import Icon from '../icon'
 import classNames from 'classnames'
 import Provider from '../context'
 import TimePeriodPanel from './TimePeriodPanel'
-import { dateFormat, parse, getStartDate, addMonths, subMonths } from './dateUtil'
+import { dateFormat, parse, getStartDate, addMonths, subMonths, startOfWeek, endOfWeek } from './dateUtil'
 
 class DatePanel extends Component {
   constructor (props) {
@@ -178,8 +178,19 @@ class DatePanel extends Component {
     }
   }
   onDatePick (_date) {
-    const { type, showTime, onPick, timeInterval = 240 } = this.props
+    const { type, showTime, onPick, timeInterval = 240, weekOffset } = this.props
     // const { hours, minutes, seconds } = deconstructDate(this.props.date)
+    if (type === 'week') {
+      const _weekOffset = {weekStartsOn: weekOffset}
+      let weekStart = startOfWeek(_date, _weekOffset)
+      let weekEnd = type === 'week' ? endOfWeek(_date, _weekOffset) : endOfWeek(_date, _weekOffset)
+      console.log('weekEnd', weekEnd)
+      onPick({
+        startDate: weekStart,
+        endDate: weekEnd
+      }, false)
+      return
+    }
     if (type === 'timeperiod') {
       onPick(
         { startDate: _date, endDate: new Date(_date.getTime() + timeInterval * 60 * 1000) },

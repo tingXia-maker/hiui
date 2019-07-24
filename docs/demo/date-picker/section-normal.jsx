@@ -18,7 +18,31 @@ class Demo extends React.Component {
         <DatePicker
           value={new Date}
           onChange={(d) => {
-            console.log('value 为 Date 实例', DatePicker.format(d, 'YYYY-MM-DD E'))
+            console.log('callback', d)
+          }}
+        />
+        <DatePicker
+          value={null}
+          onChange={(d) => {
+            console.log('callback', d)
+          }}
+        />
+        <DatePicker
+          value={undefined}
+          onChange={(d) => {
+            console.log('callback', d)
+          }}
+        />
+        <DatePicker
+          value={1564046819811}
+          onChange={(d) => {
+            console.log('callback', d)
+          }}
+        />
+        <DatePicker
+          value="2019-01-01"
+          onChange={(d) => {
+            console.log('callback', d)
           }}
         />
       </div>

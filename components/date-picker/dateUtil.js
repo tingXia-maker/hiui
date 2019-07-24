@@ -27,7 +27,7 @@ import addYears from 'date-fns/add_years'
 import subYears from 'date-fns/sub_years'
 
 const getValidDate = (date) => {
-  return isValid(parse(date)) ? parse(date) : new Date()
+  return (!isValid(parse(date)) || date === null) ? new Date() : parse(date)
 }
 const getStartDate = (dateObj) => {
   return getValidDate(dateObj.startDate)

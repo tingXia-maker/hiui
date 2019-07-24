@@ -30,6 +30,7 @@ class Calender extends Component {
 
   getRows () {
     let {type, range, date, minDate, maxDate, weekOffset} = this.props
+    console.log('calen', date)
     let _date = date
     let {year, month, week} = deconstructDate(_date, weekOffset)
     let {endDate, startDate} = range || {startDate: null, endDate: null}

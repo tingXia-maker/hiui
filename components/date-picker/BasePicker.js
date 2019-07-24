@@ -6,7 +6,7 @@ import {formatterDate, FORMATS} from './constants'
 import PropTypes from 'prop-types'
 import DatePickerType from './Type'
 
-import {parse, startOfWeek, endOfWeek, dateFormat, isValid} from './dateUtil'
+import {parse, dateFormat, isValid} from './dateUtil'
 class BasePicker extends Component {
   inputRoot = null
   input = null
@@ -157,9 +157,9 @@ class BasePicker extends Component {
     if (!date.startDate) {
       date = {startDate: date, endDate: undefined}
     }
-
     const {type, showTime, localeDatas, weekOffset} = this.props
     const {format} = this.state
+    console.log('onPick', date)
     this.setState({
       date,
       texts: [formatterDate(type, date.startDate, format, showTime, localeDatas, weekOffset), formatterDate(type, date.endDate, format, showTime, localeDatas, weekOffset)],
@@ -172,19 +172,18 @@ class BasePicker extends Component {
     })
   }
   callback () {
-    const {type, onChange, weekOffset} = this.props
+    const {type, onChange} = this.props
     const {date} = this.state
     if (onChange) {
-      const {startDate, endDate} = date
-      const _weekOffset = {weekStartsOn: weekOffset}
-      if (type === 'week') {
-        onChange({start: startOfWeek(startDate, _weekOffset), end: endOfWeek(startDate, _weekOffset)})
+      let {startDate, endDate} = date
+      console.log('date', date)
+      startDate = isValid(startDate) ? startDate : ''
+      endDate = isValid(endDate) ? endDate : ''
+      if (type === 'week' || type === 'weekrange') {
+        onChange(date)
         return
       }
-      if (type === 'weekrange') {
-        onChange({start: startOfWeek(startDate, _weekOffset), end: endOfWeek(endDate, _weekOffset)})
-        return
-      }
+
       if (['timerange', 'timeperiod', 'daterange'].includes(type)) {
         onChange({start: startDate, end: endDate})
         return
@@ -291,9 +290,9 @@ class BasePicker extends Component {
   _clear () {
     const {onChange} = this.props
     if (onChange) {
-      onChange(null)
+      onChange('')
     }
-    this.setState({texts: ['', ''], isFocus: false})
+    this.setState({date: {startDate: null, endDate: null}, texts: ['', ''], isFocus: false})
   }
   _icon () {
     const {isFocus} = this.state

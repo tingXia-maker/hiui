@@ -8,6 +8,7 @@ export default class WeekRangePanel extends Component {
   constructor (props) {
     super(props)
     const {startDate, endDate} = props.date
+    console.log('weekrangpanel', props.date)
     let leftDate = getStartDate(startDate)
     let rightDate = isValid(endDate) ? endDate : nextMonth(leftDate)
     if (endDate) {
@@ -25,6 +26,7 @@ export default class WeekRangePanel extends Component {
       leftDate,
       rightDate
     }
+    console.log(this.state)
   }
   /**
    * Header 中间部分内容
@@ -199,7 +201,7 @@ export default class WeekRangePanel extends Component {
     )
     // const {year, month, day} = deconstructDate(date)
     // const _date = new Date(year, month, day)
-
+    console.log('weekRender', leftDate, rightDate)
     return (
       <div
         style={this.props.style}
