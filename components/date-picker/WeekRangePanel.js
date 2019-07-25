@@ -4,30 +4,35 @@ import Calender from './Calender'
 import Icon from '../icon'
 import classNames from 'classnames'
 import {startOfWeek, endOfWeek, isSameMonth, isValid, getStartDate} from './dateUtil'
+
+const _parseProps = (date) => {
+  const {startDate, endDate} = date
+  let leftDate = getStartDate(date)
+  let rightDate = isValid(endDate) ? endDate : nextMonth(leftDate)
+  if (endDate) {
+    if (isSameMonth(startDate, endDate)) {
+      rightDate = nextMonth(leftDate)
+    }
+  }
+  return {
+    range: {
+      startDate: startOfWeek(leftDate),
+      endDate: rightDate ? endOfWeek(rightDate) : endOfWeek(leftDate),
+      selecting: false
+    },
+    leftDate,
+    rightDate
+  }
+}
 export default class WeekRangePanel extends Component {
   constructor (props) {
     super(props)
-    const {startDate, endDate} = props.date
-    console.log('weekrangpanel', props.date)
-    let leftDate = getStartDate(startDate)
-    let rightDate = isValid(endDate) ? endDate : nextMonth(leftDate)
-    if (endDate) {
-      if (isSameMonth(startDate, endDate)) {
-        rightDate = nextMonth(leftDate)
-      }
-    }
     this.state = {
-      date: leftDate,
-      range: {
-        startDate: startOfWeek(leftDate),
-        endDate: rightDate ? endOfWeek(rightDate) : endOfWeek(leftDate),
-        selecting: false
-      },
-      leftDate,
-      rightDate
+      // date: leftDate,
+      ..._parseProps(props.date)
     }
-    console.log(this.state)
   }
+
   /**
    * Header 中间部分内容
    * @param {String} type 选择器类型
@@ -152,9 +157,6 @@ export default class WeekRangePanel extends Component {
         left.year += 1
       }
       nLeftDate.setFullYear(left.year)
-      // this.setState({
-      //   leftDate
-      // })
     } else {
       if (flag) {
         right.year -= 1
@@ -162,9 +164,6 @@ export default class WeekRangePanel extends Component {
         right.year += 1
       }
       nRightDate.setFullYear(right.year)
-      // this.setState({
-      //   rightDate
-      // })
     }
     if (nLeftDate <= nRightDate) {
       this.setState({
@@ -179,10 +178,15 @@ export default class WeekRangePanel extends Component {
     range.startDate = startDate
     range.endDate = endDate
     this.setState({
-      range
+      range,
+      leftDate: startDate || this.state.leftDate,
+      rightDate: endDate || this.state.rightDate
     })
     if (endDate) {
-      onPick(range)
+      onPick({
+        startDate: startOfWeek(range.startDate),
+        endDate: endOfWeek(range.endDate)
+      })
     }
   }
   onMouseMoveHandler (date) {
@@ -201,7 +205,6 @@ export default class WeekRangePanel extends Component {
     )
     // const {year, month, day} = deconstructDate(date)
     // const _date = new Date(year, month, day)
-    console.log('weekRender', leftDate, rightDate)
     return (
       <div
         style={this.props.style}

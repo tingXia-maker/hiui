@@ -12,7 +12,7 @@ class DatePanel extends Component {
   constructor (props) {
     super(props)
     let {startDate, endDate} = props.date
-    let leftDate = getStartDate(startDate)
+    let leftDate = getStartDate(props.date)
     let rightDate = isValid(endDate) ? endDate : nextMonth(leftDate)
     if (endDate) {
       const {year: sYear, month: sMonth} = deconstructDate(leftDate)

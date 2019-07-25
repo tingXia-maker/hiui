@@ -112,14 +112,15 @@ class BasePicker extends Component {
     })
   }
   componentDidMount () {
-    this._parseProps(this.props, (date) => {
-      if (date.startDate && date.endDate) {
-        date = ({start: new Date(date.startDate), end: new Date(date.endDate)})
-      } else {
-        date = new Date(date)
-      }
-      this.props.value && this.props.onChange && this.props.onChange(date)
-    })
+    this._parseProps(this.props)
+    // this._parseProps(this.props, (date) => {
+    //   if (date.startDate && date.endDate) {
+    //     date = ({start: new Date(date.startDate), end: new Date(date.endDate)})
+    //   } else {
+    //     date = new Date(date)
+    //   }
+    //   this.props.value && this.props.onChange && this.props.onChange(date)
+    // })
     this.setPlaceholder()
     let rect = this.inputRoot.getBoundingClientRect()
     this.calcPanelPos(rect)
@@ -159,7 +160,6 @@ class BasePicker extends Component {
     }
     const {type, showTime, localeDatas, weekOffset} = this.props
     const {format} = this.state
-    console.log('onPick', date)
     this.setState({
       date,
       texts: [formatterDate(type, date.startDate, format, showTime, localeDatas, weekOffset), formatterDate(type, date.endDate, format, showTime, localeDatas, weekOffset)],
@@ -176,7 +176,6 @@ class BasePicker extends Component {
     const {date} = this.state
     if (onChange) {
       let {startDate, endDate} = date
-      console.log('date', date)
       startDate = isValid(startDate) ? startDate : ''
       endDate = isValid(endDate) ? endDate : ''
       if (type === 'week' || type === 'weekrange') {
@@ -231,10 +230,10 @@ class BasePicker extends Component {
     let startDate = parse(texts[0])
     let endDate = parse(texts[1])
 
-    if (isValid(startDate)) {
+    if (startDate && isValid(startDate)) {
       date.startDate ? date.startDate = startDate : date = startDate
     }
-    if (isValid(endDate)) {
+    if (endDate && isValid(endDate)) {
       date.endDate && (date.endDate = endDate)
     }
     // this.setState({date, texts: [formatterDate(type, date.startDate || date, format, showTime, localeDatas, weekOffset), formatterDate(type, date.endDate, format, showTime, localeDatas, weekOffset)]})
@@ -288,9 +287,11 @@ class BasePicker extends Component {
     )
   }
   _clear () {
-    const {onChange} = this.props
+    const {onChange, type} = this.props
     if (onChange) {
-      onChange('')
+      onChange(
+        type.includes('range') || type === 'timeperiod' ? {start: '', end: ''} : ''
+      )
     }
     this.setState({date: {startDate: null, endDate: null}, texts: ['', ''], isFocus: false})
   }

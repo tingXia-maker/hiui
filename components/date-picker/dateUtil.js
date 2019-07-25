@@ -22,12 +22,15 @@ import getSeconds from 'date-fns/get_seconds'
 import addHours from 'date-fns/add_hours'
 import subDays from 'date-fns/sub_days'
 import differenceInDays from 'date-fns/difference_in_days'
-import isValid from 'date-fns/is_valid'
+import * as dfIsValid from 'date-fns/is_valid'
 import addYears from 'date-fns/add_years'
 import subYears from 'date-fns/sub_years'
 
+const isValid = (date) => {
+  return (date && dfIsValid(parse(date)))
+}
 const getValidDate = (date) => {
-  return (!isValid(parse(date)) || date === null) ? new Date() : parse(date)
+  return isValid(date) ? parse(date) : new Date()
 }
 const getStartDate = (dateObj) => {
   return getValidDate(dateObj.startDate)
