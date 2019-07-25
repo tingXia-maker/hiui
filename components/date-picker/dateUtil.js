@@ -22,7 +22,7 @@ import getSeconds from 'date-fns/get_seconds'
 import addHours from 'date-fns/add_hours'
 import subDays from 'date-fns/sub_days'
 import differenceInDays from 'date-fns/difference_in_days'
-import * as dfIsValid from 'date-fns/is_valid'
+import dfIsValid from 'date-fns/is_valid'
 import addYears from 'date-fns/add_years'
 import subYears from 'date-fns/sub_years'
 
