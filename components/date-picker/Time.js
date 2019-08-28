@@ -2,12 +2,12 @@ import React, {Component} from 'react'
 import {deconstructDate} from './util'
 import Icon from '../icon'
 import classNames from 'classnames'
-import { isSameDay } from './dateUtil'
+import { isSameDay, getValidDate } from './dateUtil'
 export default class TimePanel extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      date: new Date(props.date),
+      date: getValidDate(props.date),
       prefix: {
         hours: 0,
         minutes: 0,
@@ -82,7 +82,7 @@ export default class TimePanel extends Component {
   componentWillReceiveProps (props) {
     if (!isSameDay(props.date, this.state.date)) {
       this.setState({
-        date: props.date
+        date: getValidDate(props.date)
       })
     }
   }
@@ -101,6 +101,7 @@ export default class TimePanel extends Component {
   }
 
   clickEvent (flag, e) {
+    e.stopPropagation()
     const li = e.target
     if (!li.innerText) return
     const {date} = this.state
@@ -272,17 +273,7 @@ export default class TimePanel extends Component {
             </ul>
             {secondsArrow && this.renderArrow('seconds')}
           </div>
-          <div className='hi-timepicker__current-line' style={{top: this.props.onlyTime ? 108 : 140}} >
-            {/* <span>{hours}</span>
-            <span>{minutes}</span>
-            <span>{seconds}</span> */}
-          </div>
-          {/* <span className='hi-timepicker__page-turn' ref={this.pageUpRef}>
-            <Icon name='up' />
-          </span>
-          <span className='hi-timepicker__page-turn' ref={this.pageDownRef}>
-            <Icon name='down' />
-          </span> */}
+          <div className='hi-timepicker__current-line' style={{top: this.props.onlyTime ? 108 : 140}} />
         </div>
       </div>
     )
