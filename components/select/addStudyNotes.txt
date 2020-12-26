@@ -1,0 +1,32 @@
+1. 如何定义api：
+举例： 在selectInput上面定义api  onDelete ，在selectInput 的组件里面的某一个DOM上面调用onDelete函数
+总结： 这些封装好的api只不过就是在原有dom事件上面进行扩展
+
+2. BEM 规范还是很香的
+
+
+3. 组件封装
+3.1 （前提）在render组件里面言简意赅的说明： 根据modal 来渲染哪一种类型的组件
+3.2  renderMultiple和renderSingle 里面直接阐述在组件里面在哪些事件里面调用了那些函数：主要阐述有什么dom 调用了什么方法
+3.3  保证每一个函数只执行一个功能
+
+4. 自已之前没有用过的语法或者是语法用的不对的地方：
+4.1 this.itemsRef
+4.2  我他妈之前classNames 都是  a ? 'classA' : 'classB'  我他妈真的是不讲武德  classA: true 不香吗
+4.3 
+
+
+总的来说：用最简单还易于理解的代码 实现相对应的功能
+1. itemSelected  我贼，自己当时在实现购物车的时候用的是componentDidMounted里面遍历加上选中的效果  在map里面直接进行了radio是否选中   如果将选中的效果封装起来更加便于理解 代码也就会更加的精简
+2. 在没有数据的时候会显示一个loading 算是基本常识吧！之前被俊杰吐槽过了但是还是没有长记性
+3. 在数组截取的时候用的是slice方法 能不去创建新的变量就不会去创建新的变量  我他妈之前经常用的是splice  老去创建了新的变量去接数组 保证对原有数组不更改 感觉多此一举了
+4. 针对全选的功能：
+dropdownItems.forEach(item => {
+      if (!item.disabled && this.matchFilter(item)) {
+        if (!_selectedItems.map(selectItem => selectItem.id).includes(item.id)) {
+          _selectedItems.push(item)
+          changedItems.push(item)
+        }
+      }
+    })
+这个真的牛逼。 我他妈是map +   indexOf   代码还是又臭又长的
